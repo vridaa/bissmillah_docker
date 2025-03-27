@@ -1,273 +1,289 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>MeowNotes</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.3.0/luxon.min.js"></script>
-    <style>
-        /* Warna pastel untuk kategori */
-        
-
-        label {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        #categoryFilter {
-            padding: 10px;
-            font-size: 14px;
-            border-radius: 4px;
-            border: 2px solid #ccc;
-            background: color #e2ceb1;;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        #categoryFilter:hover {
-            background-color: #e6e6e6;
-        }
-
-
-        /* Warna dropdown per kategori */
-        option[value="tugas"] { background-color: #E3EAED; }  
-        option[value="hutang"] { background-color: #F9E6E6; } 
-        option[value="kerja"] { background-color: #E9F2EB; }  
-        option[value="penting"] { background-color: #FCF6DA; }
-        option[value="lainnya"] { background-color: #F0E8F0; }
-
-
-        /* Container utama */
-    .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding: 20px;
-    }
-
-    /* Header dengan logo */
-    .title-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
-        font-size: 32px;
-        font-weight: bold;
-        color: #444;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .logo-kucing {
-        height: 50px;
-        width: auto;
-        transition: transform 0.3s ease-in-out;
-    }
-
-    .logo-kucing:hover {
-        transform: rotate(10deg) scale(1.1);
-    }
-
-    /* Filter Kategori */
-    .filter-container {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 16px;
-        background: #fff;
-        padding: 10px 16px;
-        border-radius: 12px;
-        box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    label {
-        font-size: 16px;
-        font-weight: bold;
-        color: #555;
-    }
-
-    #categoryFilter {
-        padding: 10px;
-        font-size: 14px;
-        border-radius: 8px;
-        border: 2px solid #ddd;
-        background: #f9f9f9;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    #categoryFilter:hover {
-        background-color: #f0f0f0;
-        border-color: #bbb;
-    }
-
-    /* Tombol Tambah Catatan */
-    .add-note-btn {
-        background: linear-gradient(135deg, #ff85a2, #ff5c8a);
-        color: white;
-        border: none;
-        padding: 12px 24px;
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 25px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        transition: 0.3s ease-in-out;
-        box-shadow: 2px 4px 10px rgba(255, 92, 138, 0.5);
-    }
-
-    .add-note-btn:hover {
-        background: linear-gradient(135deg, #ff5c8a, #ff2e70);
-        transform: scale(1.05);
-        box-shadow: 2px 4px 15px rgba(255, 92, 138, 0.7);
-    }
-
-    .icon-plus {
-        width: 18px;
-        height: 18px;
-    }
-
-
-        /* Tombol Edit dan Delete */
-        .note-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-
-        .edit-btn, .delete-btn {
-            border: none;
-            padding: 8px 12px;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: 0.3s;
-            box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Tombol Edit (Biru Pastel) */
-        .edit-btn {
-            background-color:rgb(67, 128, 188);
-            color: white;
-        }
-
-        .edit-btn:hover {
-            background-color: #87B4E0;
-            transform: scale(1.05);
-        }
-
-        /* Tombol Delete (Merah Pastel) */
-        .delete-btn {
-            background-color:rgb(244, 119, 119);
-            color: white;
-        }
-
-        .delete-btn:hover {
-            background-color: #E69A9A;
-            transform: scale(1.05);
-        }
-
-        /* Ikon tombol */
-        .icon {
-            width: 16px;
-            height: 16px;
-        }
-    /* Container untuk grid notes */
-    .notes-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 16px;
-        width: 100%;
-        max-width: 1000px;
-        margin-top: 20px;
-    }
-    /* Style untuk kartu catatan */
-.note-card {
-    padding: 16px;
-    border-radius: 12px;
-    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
-}
-
-.tugas { background-color: #E3EAED; }
-.hutang { background-color: #F9E6E6; }  
-.kerja { background-color: #E9F2EB; }   
-.penting { background-color: #FCF6DA; } 
-.lainnya { background-color: #F0E8F0; } 
-
-
-.note-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.15);
-}
-
-.note-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.note-content {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 12px;
-}
-
-.note-updated {
-    font-size: 12px;
-    color: #888;
-}
-
-/* Responsif */
-@media (max-width: 500px) {
-    .filter-container {
-        flex-direction: column;
-        gap: 6px;
-        width: 100%;
-    }
-
-    .add-note-btn {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-    </style>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Aplikasi Catatan</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #ffebf0;
+                text-align: center;
+            }
+            .container {
+                background-color: #ffe0eb;
+                border-radius: 8px;
+                padding: 20px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            h1 {
+                color: #d63384;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+            input, textarea {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+            button {
+                background-color: #ff66a3;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-right: 5px;
+            }
+            button:hover {
+                background-color: #ff3385;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+            th, td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            th {
+                background-color: #ffccd5;
+            }
+            .cat-image {
+                width: 100px;
+                display: block;
+                margin: 0 auto 20px;
+            }
+        </style>
+    </head>
 <body>
-
-<div class="container">
-    <h1>
-        <div class="title-container">
-            MeowNotes
-            <img src="assets/kucing.png" alt="Logo Kucing" class="logo-kucing">
+    <div class="container">
+        <h1>Aplikasi Catatan</h1>
+        
+        <div id="status" class="status"></div>
+        
+        <div id="form-container">
+            <h2 id="form-title">Tambah Catatan Baru</h2>
+            <form id="catatan-form">
+                <input type="hidden" id="catatan-id">
+                <div class="form-group">
+                    <label for="judul">Nama:</label>
+                    <input type="text" id="nama" required>
+                </div>
+                <div class="form-group">
+                    <label for="judul">Judul:</label>
+                    <input type="text" id="judul" required>
+                </div>
+                <div class="form-group">
+                    <label for="isi">Isi Catatan:</label>
+                    <textarea id="isi" rows="5" required></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" id="submit-btn" onclick="addCatatan()">Simpan</button>
+                    <button type="button" id="cancel-btn" style="display:none;">Batal</button>
+                </div>
+            </form>
         </div>
-    </h1>
-
-    <div class="filter-container">
-        <label for="categoryFilter">Kategori:</label>
-        <select id="categoryFilter">
-            <option value="">Semua</option>
-            <option value="tugas">Tugas</option>
-            <option value="hutang">Hutang</option>
-            <option value="kerja">Kerja</option>
-            <option value="penting">Penting</option>
-            <option value="lainnya">Lainnya</option>
-        </select>
+        
+        <h2>Daftar Catatan</h2>
+        <table id="catatan-table">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Judul</th>
+                    <th>Isi</th>
+                    <th>Tindakan</th>
+                </tr>
+            </thead>
+            <tbody id="catatan-list">
+                <!-- Data will be loaded here dynamically -->
+            </tbody>
+        </table>
     </div>
 
-    <button class="add-note-btn" onclick="window.location.href='add_note.html'">
-        <img src="assets/plus.png" alt="Add" class="icon-plus"> Add New Note
-    </button>
+    <script src="js/utils.js"></script>
+    <script>
 
-    <div class="notes-grid" id="notesContainer"></div>
-</div>
+        window.onload = function () {
+            getCatatan();
+        };        
+        // Base API URL - sesuaikan dengan port dan path yang Anda gunakan
+        
+        // DOM Elements
+        const catatanForm = document.getElementById('catatan-form');
+        const catatanIdField = document.getElementById('catatan-id');
+        const judulField = document.getElementById('judul');
+        const isiField = document.getElementById('isi');
+        const catatanList = document.getElementById('catatan-list');
+        const formTitle = document.getElementById('form-title');
+        const submitBtn = document.getElementById('submit-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const statusDiv = document.getElementById('status');
+        
+        // Cancel button
+        cancelBtn.addEventListener('click', resetForm);
+        
+        async function getCatatan() {
+            try {
+                let response = await fetch(`${BASE_URL_}/catatan`);
+                let data = await response.json();
+        
+                let list = document.getElementById("catatan-list");
+                list.innerHTML = ""; 
+        
+                data.forEach(item => {
+                    let row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${item.name}</td>
+                        <td>${item.judul}</td>
+                        <td>${item.isi_catatan}</td>
+                        <td>
+                            <button onclick="updateCatatan(${item.id})">Edit</button>
+                            <button onclick="deleteCatatan(${item.id})">Hapus</button>
+                        </td>
+                    `;
+                    list.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+        
+        async function addCatatan() {
+            let judul = document.getElementById("judul").value;
+            let isi_catatan = document.getElementById("isi").value;
+            let name = document.getElementById("nama").value;
 
-<script src="scripts.js"></script>
+        
+            let data = { name, judul, isi_catatan };
+        
+            try {
+                let response = await fetch(`${BASE_URL_}/catatan`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+                console.log(data);
+        
+                if (response.ok) {
+                    alert("Catatan berhasil ditambahkan!");
+                    getCatatan(); // Refresh data
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        async function updateCatatan(id) {
+            let newJudul = prompt("Masukkan judul baru:");
+            let newIsi = prompt("Masukkan isi baru:");
+        
+            if (!newJudul || !newIsi) return; // Jika input kosong, batalkan update
+        
+            let data = { judul: newJudul, isi: newIsi };
+        
+            try {
+                let response = await fetch(`${BASE_URL_}/catatan-update/${id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+        
+                if (response.ok) {
+                    alert("Catatan berhasil diperbarui!");
+                    getCatatan(); // Refresh data
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        async function deleteCatatan(id) {
+            let confirmDelete = confirm("Yakin ingin menghapus catatan ini?");
+            if (!confirmDelete) return;
+        
+            try {
+                let response = await fetch(`${BASE_URL_}/catatan-hapus/${id}`, {
+                    method: "DELETE"
+                });
+        
+                if (response.ok) {
+                    alert("Catatan berhasil dihapus!");
+                    getCatatan(); // Refresh data
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+        
+        
+
+        // Edit catatan (populate form)
+        function editCatatan(catatan) {
+            formTitle.textContent = 'Edit Catatan';
+            catatanIdField.value = catatan.id;
+            judulField.value = catatan.judul;
+            isiField.value = catatan.isi;
+            
+            submitBtn.textContent = 'Perbarui';
+            cancelBtn.style.display = 'inline-block';
+            
+            // Scroll to form
+            document.getElementById('form-container').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Reset form
+        function resetForm() {
+            formTitle.textContent = 'Tambah Catatan Baru';
+            catatanForm.reset();
+            catatanIdField.value = '';
+            submitBtn.textContent = 'Simpan';
+            cancelBtn.style.display = 'none';
+        }
+        
+        // Show status message
+        function showStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = 'status';
+            
+            if (type === 'success') {
+                statusDiv.classList.add('success');
+            } else if (type === 'error') {
+                statusDiv.classList.add('error');
+            }
+            
+            statusDiv.style.display = 'block';
+        }
+        
+        // Hide status message
+        function hideStatus() {
+            statusDiv.style.display = 'none';
+        }
+        
+        // Helper function to escape HTML
+        function escapeHtml(str) {
+            if (!str) return '';
+            
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
 </body>
 </html>
