@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>MeowNotes</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.3.0/luxon.min.js"></script>
+    <style>label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#categoryFilter {
+  background: color #e2ceb1;
+  cursor: pointer;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 14px;
+  transition: all .3s;
+}
+
+#categoryFilter:hover {
+  background-color: #e6e6e6;
+}
+
+option[value="tugas"] {
+  background-color: #e3eaed;
+}
+
+option[value="hutang"] {
+  background-color: #f9e6e6;
+}
+
+option[value="kerja"] {
+  background-color: #e9f2eb;
+}
+
+option[value="penting"] {
+  background-color: #fcf6da;
+}
+
+option[value="lainnya"] {
+  background-color: #f0e8f0;
+}
+
+.container {
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  display: flex;
+}
+
+.title-container {
+  color: #444;
+  text-shadow: 2px 2px 4px #0000001a;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  font-size: 32px;
+  font-weight: bold;
+  display: flex;
+}
+
+.logo-kucing {
+  width: auto;
+  height: 50px;
+  transition: transform .3s ease-in-out;
+}
+
+.logo-kucing:hover {
+  transform: rotate(10deg)scale(1.1);
+}
+
+.filter-container {
+  background: #fff;
+  border-radius: 12px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 10px 16px;
+  display: flex;
+  box-shadow: 2px 4px 10px #0000001a;
+}
+
+label {
+  color: #555;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#categoryFilter {
+  cursor: pointer;
+  background: #f9f9f9;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  transition: all .3s;
+}
+
+#categoryFilter:hover {
+  background-color: #f0f0f0;
+  border-color: #bbb;
+}
+
+.add-note-btn {
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff85a2, #ff5c8a);
+  border: none;
+  border-radius: 25px;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all .3s ease-in-out;
+  display: flex;
+  box-shadow: 2px 4px 10px #ff5c8a80;
+}
+
+.add-note-btn:hover {
+  background: linear-gradient(135deg, #ff5c8a, #ff2e70);
+  transform: scale(1.05);
+  box-shadow: 2px 4px 15px #ff5c8ab3;
+}
+
+.icon-plus {
+  width: 18px;
+  height: 18px;
+}
+
+.note-buttons {
+  justify-content: space-between;
+  margin-top: 10px;
+  display: flex;
+}
+
+.edit-btn, .delete-btn {
+  cursor: pointer;
+  border: none;
+  border-radius: 20px;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all .3s;
+  display: flex;
+  box-shadow: 2px 4px 8px #0000001a;
+}
+
+.edit-btn {
+  color: #fff;
+  background-color: #4380bc;
+}
+
+.edit-btn:hover {
+  background-color: #87b4e0;
+  transform: scale(1.05);
+}
+
+.delete-btn {
+  color: #fff;
+  background-color: #f47777;
+}
+
+.delete-btn:hover {
+  background-color: #e69a9a;
+  transform: scale(1.05);
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+.notes-grid {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 1000px;
+  margin-top: 20px;
+  display: grid;
+}
+
+.note-card {
+  border-radius: 12px;
+  padding: 16px;
+  transition: transform .2s ease-in-out;
+  box-shadow: 2px 4px 10px #0000001a;
+}
+
+.tugas {
+  background-color: #e3eaed;
+}
+
+.hutang {
+  background-color: #f9e6e6;
+}
+
+.kerja {
+  background-color: #e9f2eb;
+}
+
+.penting {
+  background-color: #fcf6da;
+}
+
+.lainnya {
+  background-color: #f0e8f0;
+}
+
+.note-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 2px 4px 15px #00000026;
+}
+
+.note-title {
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.note-content {
+  color: #555;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.note-updated {
+  color: #888;
+  font-size: 12px;
+}
+
+@media (width <= 500px) {
+  .filter-container {
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .add-note-btn {
+    justify-content: center;
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>
+        <div class="title-container">
+            MeowNotes
+            <img src="/kucing.2934dca9.png" alt="Logo Kucing" class="logo-kucing">
+        </div>
+    </h1>
+
+    <div class="filter-container">
+        <label for="categoryFilter">Kategori:</label>
+        <select id="categoryFilter">
+            <option value="">Semua</option>
+            <option value="tugas">Tugas</option>
+            <option value="hutang">Hutang</option>
+            <option value="kerja">Kerja</option>
+            <option value="penting">Penting</option>
+            <option value="lainnya">Lainnya</option>
+        </select>
+    </div>
+
+    <button class="add-note-btn" onclick="window.location.href='add_note.html'">
+        <img src="/plus.d81457db.png" alt="Add" class="icon-plus"> Add New Note
+    </button>
+
+    <div class="notes-grid" id="notesContainer"></div>
+</div>
+
+<script src="/index.5e469f4a.js"></script>
+<script src="/frontend.3464ddca.js"></script></body>
+</html>

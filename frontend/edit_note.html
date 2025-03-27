@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Note</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ff85a2;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            text-align: left;
+            width: 300px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #ff85a2;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #ff5c8a;
+            box-shadow: 2px 4px 15px rgba(255, 92, 138, 0.7);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+<h1>Edit Note</h1>
+<form id="editNoteForm">
+    <label>Title:</label>
+    <input type="text" id="title" required>
+
+    <label>Content:</label>
+    <textarea id="content" required></textarea>
+
+    <label>Category:</label>
+    <select id="category" required>
+        <option value="tugas">Tugas</option>
+        <option value="hutang">Hutang</option>
+        <option value="kerja">Kerja</option>
+        <option value="penting">Penting</option>
+        <option value="lainnya">Lainnya</option>
+    </select>
+
+    <button type="submit">Update Note</button>
+</form>
+
+<script>
+// Mendapatkan ID catatan dari URL
+const urlParams = new URLSearchParams(window.location.search);
+const noteId = urlParams.get("id");
+
+console.log("Note ID from URL:", noteId); // Debugging
+
+if (!noteId) {
+    alert("Note ID is missing!");
+    window.location.href = "index.html";
+}
+
+// Fungsi untuk memuat catatan berdasarkan ID
+async function loadNote() {
+    try {
+        const response = await fetch(`http://localhost:4000/notes/${noteId}`);
+        if (!response.ok) throw new Error("Note not found");
+
+        const note = await response.json();
+
+        document.getElementById("title").value = note.title;
+        document.getElementById("content").value = note.content;
+        document.getElementById("category").value = note.category;
+    } catch (error) {
+        console.error("Error loading note:", error);
+        alert("Catatan tidak ditemukan!");
+        window.location.href = "index.html";
+    }
+}
+
+// Load note saat halaman dimuat
+document.addEventListener("DOMContentLoaded", loadNote);
+
+// Fungsi untuk memperbarui catatan
+document.getElementById("editNoteForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+    const updatedNote = {
+        title: document.getElementById("title").value,
+        content: document.getElementById("content").value,
+        category: document.getElementById("category").value
+    };
+
+    try {
+        const response = await fetch(`http://localhost:4000/edit-notes/${noteId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedNote)
+        });
+
+        if (!response.ok) throw new Error("Gagal memperbarui catatan!");
+
+        alert("Catatan berhasil diperbarui!");
+        window.location.href = "index.html";
+    } catch (error) {
+        console.error("Error updating note:", error);
+        alert("Terjadi kesalahan saat memperbarui catatan.");
+    }
+});
+</script>
+
+</body>
+</html>
