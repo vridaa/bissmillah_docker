@@ -80,20 +80,25 @@
             <form id="catatan-form">
                 <input type="hidden" id="catatan-id">
                 <div class="form-group">
-                    <label for="judul">Nama:</label>
-                    <input type="text" id="nama" required>
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" required>
                 </div>
                 <div class="form-group">
-                    <label for="judul">Judul:</label>
-                    <input type="text" id="judul" required>
+                    <label for="content">Content:</label>
+                    <textarea id="content" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="isi">Isi Catatan:</label>
-                    <textarea id="isi" rows="5" required></textarea>
+                    <label for="category">Category:</label>
+                    <select id="category" required>
+                        <option value="tugas">Tugas</option>
+                        <option value="hutang">Hutang</option>
+                        <option value="kerja">Kerja</option>
+                        <option value="penting">Penting</option>
+                        <option value="lainnya">Lainnya</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <button type="submit" id="submit-btn" onclick="addCatatan()">Simpan</button>
-                    <button type="button" id="cancel-btn" style="display:none;">Batal</button>
+                    <button type="submit">Add Note</button>
                 </div>
             </form>
         </div>
